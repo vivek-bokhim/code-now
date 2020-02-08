@@ -1,0 +1,57 @@
+import socket
+
+s= socket .socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((socket.gethostname(), 2044))
+
+s.listen(5)
+c, addr = s.accept()
+
+temp = 0
+counter = 0
+
+def disp():
+    global counter
+    vlist = []
+    vlist.insert(0,counter)
+    vlist.insert(1,temp)
+    print ("\nvector clock :",vlist)
+
+def send():
+    global counter
+    counter += 1
+    print("Updated Time: ",counter)
+    c.send(str(counter).encode('utf-8'))
+    disp()
+
+def receive():
+    global counter
+    global temp
+    temp = int(c.recv(1024).decode())
+    print("Updated Time: ",counter)
+    disp()
+    
+def event():
+    global counter
+    counter += 1
+    print("Updated Time: ",counter)
+    disp()
+
+def take_input():
+    print("\n0 ---> event\t \n1 ---> send\t \n2 ---> receive \n")
+    a = int(input("Enter: "))
+    return a
+
+def onConnection():
+    while True:
+
+        flag = take_input()
+
+        if flag == 0:
+            print ("\nsome event happened\t")
+            event()
+        if flag == 1:    
+            send()
+        if flag == 2:
+            receive()
+
+onConnection()
